@@ -1,0 +1,47 @@
+## Open files in R using read.table and fread: X_test, X_train, Y_test, Y_train, subject_test, subject_train, features
+
+Create X_testtrain by merging X_test and X_train on rows to X_testtrain
+Add variable labels of the columns to X_testtrain, this is from the features file. 
+
+Create subject_file from merge subject_test, subject_train
+
+Create Activities from merge Y_test, Y_train.
+Add labels of variable columnnames:
+label in subject_file = "subject"
+names(Activities) <- "activity"
+
+Create total: by merge subject_file, Activities, X_testtrain on columns 
+
+Use activity_labels text file to change of activity column: 
+"1" =  "WALKING" 
+"2" = "WALKING_UPSTAIRS" 
+"3" = "WALKING_DOWNSTAIRS" 
+"4"= "SITTING"
+"5" = "STANDING"
+"6" = "LAYING"
+
+Subsetting part of total: the first two columns subject and activity and all the columns with a name that includes mean or std. 
+I did this in three steps and merged them togehter to tidy_dataset_1
+
+Controlled data.frame for missing values and shape. 
+
+###########################
+
+starting working with new name: tidy_dataset_1 = seconddataset 
+
+removed the columns that included std in the title with select function. 
+Prepared from features table loaded earlier a list containing the measurements that included mean, called 'vars'
+
+Melt the dataset, so that the id variables are subject and activity and the measure variables were all the variables that 
+about the mean, now included in 'vars'
+This lead to narrowdataset of 4 columns
+
+Last step is to dcast based on subject + activity and specified to give the mean. 
+tidy_dataset_2 <- dcast(narrowdataset, subject + activity ~ variable, mean)
+
+Checked the resulting tidy_dataset_2
+head(tidy_dataset_2)
+summary(tidy_dataset_2)
+
+Created the file called tidydataset. 
+write.table(tidy_dataset_2, file = "~/cursussen/R/getting and cleaning data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/test/tidydataset.txt", row.name=FALSE)
